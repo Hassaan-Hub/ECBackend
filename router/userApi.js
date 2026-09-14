@@ -1,19 +1,19 @@
 const express = require("express");
 
-const user = express();
+const router = express.Router();
 
-user.use(express.json());
+router.use(express.json());
 
 const userData = [
-    { "id": 1, "name": "Hassaan", "email": "john@example.com", "city": "Karachi" },
-    { "id": 2, "name": "Daniyal", "email": "jane@example.com", "city": "lahore" },
-    { "id": 3, "name": "Kaif", "email": "alice@example.com", "city": "Karachi" },
-    { "id": 4, "name": "Usama", "email": "bob@example.com", "city": "Islamabad" },
-    { "id": 5, "name": "Ali", "email": "charlie@example.com", "city": "karachi" }
+    { "id": 1, "name": "Hassaan", "email": "hassaan@example.com", "city": "Karachi" },
+    { "id": 2, "name": "Daniyal", "email": "daniyal@example.com", "city": "lahore" },
+    { "id": 3, "name": "Kaif", "email": "kaif@example.com", "city": "Karachi" },
+    { "id": 4, "name": "Usama", "email": "usama@example.com", "city": "Islamabad" },
+    { "id": 5, "name": "Ali", "email": "ali@example.com", "city": "karachi" }
 ];
 
 
-user.get("/users", (req, res) => {
+router.get("/", (req, res) => {
     res.status(200).json({
         message: "Users retrieved successfully",
         data: userData
@@ -21,7 +21,7 @@ user.get("/users", (req, res) => {
 });
 
 
-user.get("/users/:id", (req, res) => {
+router.get("/:id", (req, res) => {
     const userId = parseInt(req.params.id);
     const user = userData.find(u => u.id === userId);
 
@@ -38,7 +38,7 @@ user.get("/users/:id", (req, res) => {
 });
 
 
-user.post("/users", (req, res) => {
+router.post("/", (req, res) => {
     const { name, email, city } = req.body;
 
     if (!name || !email || !city) {
@@ -57,7 +57,7 @@ user.post("/users", (req, res) => {
 });
 
 
-user.put("/users/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     const userId = parseInt(req.params.id);
     const user = userData.find(u => u.id === userId);
 
@@ -86,7 +86,7 @@ user.put("/users/:id", (req, res) => {
 });
 
 
-user.delete("/users/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     const userId = parseInt(req.params.id);
     const userIndex = userData.findIndex(u => u.id === userId);
 
@@ -105,4 +105,4 @@ user.delete("/users/:id", (req, res) => {
     });
 });
 
-module.exports = user;
+module.exports = router;
