@@ -1,15 +1,10 @@
-const productRouter = require("./router/productApi");
-const userRouter = require("./router/userApi");
-const middleware = require("./authMiddlewarefolder/authMiddleware");
+require('dotenv').config();
 
-const express = require("express");
-const app = express();
+const app = require('./src/app');
+const connectDB = require('./src/db/db');
 
-app.use(express.json())
+connectDB()
 
-app.use("/userData", middleware, userRouter)
-app.use("/product", middleware, productRouter)
-
-app.listen(5000, () => {
-  console.log("APIs is running on port 3000");
+app.listen(process.env.PORT, () => {
+  console.log(`APIs is running on port ${process.env.PORT}`);
 })
