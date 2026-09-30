@@ -45,7 +45,7 @@ const productSchema = Joi.object({
         })
 });
 
-
+// create product
 const createProduct = async (req, res) => {
     try {
         const { title, price, category, stock } = req.body;
@@ -91,4 +91,13 @@ const createProduct = async (req, res) => {
     }
 };
 
-module.exports = createProduct;
+
+// get a single product
+const singleProduct = (req, res) => {
+    res.send("get a single product")
+}
+
+module.exports = {
+    createProduct,
+    singleProduct
+};

@@ -22,8 +22,6 @@ const authMiddleware = (req, res, next) => {
             });
         }
 
-        console.log("TOKEN:", token);
-        console.log("SECRET:", process.env.JWT_SECRET_KEY);
         // JWT verify
         const decoded = jwt.verify(
             token,
