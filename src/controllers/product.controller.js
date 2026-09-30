@@ -48,7 +48,6 @@ const productSchema = Joi.object({
 
 const createProduct = async (req, res) => {
     try {
-
         const { title, price, category, stock } = req.body;
 
         // Validate body
