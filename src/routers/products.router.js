@@ -1,13 +1,15 @@
 const express = require('express');
-const { createProduct, singleProduct } = require('../controllers/product.controller');
 const multer = require('multer');
 const authMiddleware = require('../midleware/authMidleware');
+const { createProduct, singleProduct, allProducts, updateProduct } = require('../controllers/product.controller');
 
 const productRouter = express.Router();
 
 const uploadImage = multer({ Storage: multer.memoryStorage })
 
 productRouter.post('/create-product', authMiddleware, uploadImage.single('image'), createProduct)
-productRouter.get('/product', authMiddleware, singleProduct)
+productRouter.get('/products', authMiddleware, allProducts)
+productRouter.get('/product/:id', authMiddleware, singleProduct)
+productRouter.put('/product/:id', authMiddleware, updateProduct)
 
 module.exports = productRouter;

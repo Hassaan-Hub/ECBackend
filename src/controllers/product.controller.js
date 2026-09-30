@@ -92,12 +92,64 @@ const createProduct = async (req, res) => {
 };
 
 
+// get all products
+const allProducts = async (req, res) => {
+    try {
+        const product = await Products.find();
+
+        return res.status(200).json({
+            status: 200,
+            message: "Product fetched successfully",
+            data: product
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 500,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+}
+
+
+
 // get a single product
-const singleProduct = (req, res) => {
-    res.send("get a single product")
+const singleProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const product = await Products.findById(id)
+
+        if (!product) {
+            return res.status(404).json({
+                status: 404,
+                message: "Product not found"
+            });
+        }
+
+        return res.status(200).json({
+            status: 200,
+            message: "Product fetched successfully",
+            data: product
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 500,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+}
+
+const updateProduct = (req, res) => {
+    console.log(req.params.id);
+    
+    res.send("product updated successfully")
 }
 
 module.exports = {
     createProduct,
-    singleProduct
+    singleProduct,
+    allProducts,
+    updateProduct
 };
