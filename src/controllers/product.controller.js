@@ -65,7 +65,6 @@ const createProduct = async (req, res) => {
         // Upload image
         const buffer = req.file.buffer;
         const result = await imagekitData(buffer);
-        console.log(result.url);
 
         // Create product
         const product = await Products.create({

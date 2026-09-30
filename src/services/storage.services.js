@@ -10,8 +10,6 @@ const imagekitData = async (buffer) => {
         file: buffer.toString('base64'),
         fileName: 'image.jpg',
     });
-
-    console.log(response);
     return response
 }
 
