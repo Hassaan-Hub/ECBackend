@@ -13,4 +13,11 @@ const imagekitData = async (buffer) => {
     return response
 }
 
-module.exports = imagekitData;
+const deleteImage = async (fileId) => {
+    const response = await client.files.delete(fileId)
+
+    return response;
+}
+
+
+module.exports = { imagekitData, deleteImage };

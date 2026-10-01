@@ -1,5 +1,5 @@
 const Products = require("../models/product.model");
-const imagekitData = require("../services/storage.services");
+const { imagekitData, deleteImage } = require("../services/storage.services");
 
 const Joi = require("joi");
 
@@ -14,6 +14,18 @@ const productSchema = Joi.object({
             "string.min": "Title must be at least 3 characters",
             "string.max": "Title must not exceed 100 characters",
             "any.required": "Title is required"
+        }),
+
+    description: Joi.string()
+        .trim()
+        .min(10)
+        .max(1000)
+        .required()
+        .messages({
+            "string.empty": "Description is required",
+            "string.min": "Description must be at least 10 characters",
+            "string.max": "Description must not exceed 1000 characters",
+            "any.required": "Description is required"
         }),
 
     price: Joi.number()
@@ -48,7 +60,7 @@ const productSchema = Joi.object({
 // create product
 const createProduct = async (req, res) => {
     try {
-        const { title, price, category, stock } = req.body;
+        const { title, description, price, category, stock } = req.body;
 
         // Validate body
         await productSchema.validateAsync(req.body);
@@ -68,10 +80,14 @@ const createProduct = async (req, res) => {
         // Create product
         const product = await Products.create({
             title,
+            description,
             price,
             category,
             stock,
-            image: result.url
+            image: {
+                url: result.url,
+                fileId: result.fileId
+            }
         });
 
         return res.status(201).json({
@@ -141,15 +157,78 @@ const singleProduct = async (req, res) => {
     }
 }
 
-const updateProduct = (req, res) => {
-    console.log(req.params.id);
-    
-    res.send("product updated successfully")
+
+// update product data
+const updateProduct = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const { title, description, price, category, stock } = req.body;
+
+        await Products.findByIdAndUpdate(
+            { _id: productId },
+            { title, description, price, category, stock },
+            { new: true }
+        )
+
+        if (!product) {
+            return res.status(404).json({
+                status: 404,
+                message: "Product not found"
+            });
+        }
+
+        return res.status(200).json({
+            status: 200,
+            message: "Product updated successfully"
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status: 500,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+}
+
+
+// delete product
+const deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Products.findById(id);
+
+        if (!product) {
+            return res.status(404).json({
+                status: 404,
+                message: "Product not found"
+            });
+        }
+
+        // ImageKit se image delete
+        if (product.image?.fileId) {
+            await deleteImage(product.image.fileId);
+        }
+
+        await Products.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            status: 200,
+            message: "Product deleted successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            status: 500,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
 }
 
 module.exports = {
     createProduct,
     singleProduct,
     allProducts,
-    updateProduct
+    updateProduct,
+    deleteProduct
 };

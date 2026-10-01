@@ -73,7 +73,7 @@ const userAuth = async (req, res) => {
             `
     });
 
-    const older_token = jwt.sign({ userId: user._id, username, email }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
+      const older_token = jwt.sign({ userId: user._id, username, email }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
 
     res.status(201).json({
       status: 201,
@@ -121,7 +121,7 @@ const userLogin = async (req, res) => {
 
     const loggined = await User.findById(existedUser._id).select("-password")
 
-    const older_token = jwt.sign({ userId: existedUser._id, name: existedUser.username, email:existedUser.email }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
+    const older_token = jwt.sign({ userId: existedUser._id, name: existedUser.username, email:existedUser.email }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
 
     return res.status(200).json({
       status: 200,
