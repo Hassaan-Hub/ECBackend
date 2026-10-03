@@ -6,6 +6,7 @@ const productRouter = require('./routers/products.router');
 const app = express();
 app.use(express.json());
 
+
 app.use('/api/auth/', userRouter)
 app.use('/api/auth/', profileRouter)
 
